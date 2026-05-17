@@ -1367,3 +1367,182 @@ body::before {
 .danger-title { font-family: var(--font-display); font-size: var(--text-sm); font-weight: 700; letter-spacing: 0.02em; color: var(--color-text); }
 .danger-desc { font-size: var(--text-xs); color: var(--color-text-muted); font-style: italic; }
 .danger-divider { height: 1px; background: rgba(192,57,43,0.12); margin: 0 var(--space-5); }
+
+/* ═══════════════════════════════════════════════════════════════
+   HP SYSTEM — hearts bar
+   ═══════════════════════════════════════════════════════════════ */
+.hp-bar {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.hp-heart {
+  font-size: 18px;
+  line-height: 1;
+  transition: opacity 0.3s, filter 0.3s;
+  filter: drop-shadow(0 0 4px rgba(192, 57, 43, 0.7));
+}
+.hp-heart.lost {
+  opacity: 0.18;
+  filter: grayscale(1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WRONG ANSWER SHAKE
+   ═══════════════════════════════════════════════════════════════ */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-7px); }
+  40%       { transform: translateX(7px); }
+  60%       { transform: translateX(-5px); }
+  80%       { transform: translateX(5px); }
+}
+.wrong-shake {
+  animation: shake 0.35s ease;
+  border: 2px solid var(--color-danger, #c0392b) !important;
+  border-radius: var(--radius-sm, 4px);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   XP FLOAT ANIMATION (correct answer)
+   ═══════════════════════════════════════════════════════════════ */
+@keyframes floatUp {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  60%  { opacity: 1; transform: translateY(-18px) scale(1.1); }
+  100% { opacity: 0; transform: translateY(-32px) scale(0.9); }
+}
+.xp-float {
+  position: absolute;
+  top: 4px;
+  right: 10px;
+  color: var(--color-arcane-light, #a78bfa);
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  animation: floatUp 0.75s ease forwards;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FAIL SCREEN
+   ═══════════════════════════════════════════════════════════════ */
+.fail-card {
+  background: rgba(192, 57, 43, 0.06);
+  border: 1px solid rgba(192, 57, 43, 0.25);
+  border-radius: var(--radius-md, 8px);
+  padding: var(--space-6, 24px) var(--space-4, 16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4, 16px);
+  max-width: 480px;
+  margin: var(--space-4, 16px) auto;
+  width: 100%;
+}
+.fail-icon {
+  font-size: 48px;
+  line-height: 1;
+  filter: drop-shadow(0 0 12px rgba(192, 57, 43, 0.6));
+}
+.fail-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl, 1.5rem);
+  color: #e74c3c;
+  text-align: center;
+  margin: 0;
+}
+.fail-subtitle {
+  font-family: var(--font-body);
+  color: var(--color-text-muted);
+  font-size: var(--text-sm, 0.875rem);
+  text-align: center;
+  margin: 0;
+}
+.fail-wrong-list {
+  width: 100%;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(192, 57, 43, 0.2);
+  border-radius: var(--radius-sm, 4px);
+  padding: var(--space-3, 12px);
+}
+.fail-wrong-title {
+  font-family: var(--font-display);
+  font-size: var(--text-xs, 0.75rem);
+  color: #e74c3c;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: var(--space-2, 8px);
+}
+.fail-wrong-item {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--color-text-muted);
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  line-height: 1.4;
+}
+.fail-wrong-item:last-child { border-bottom: none; }
+.fail-xp-hint {
+  font-family: var(--font-display);
+  font-size: var(--text-xs, 0.75rem);
+  color: var(--color-primary, #c9962a);
+  letter-spacing: 0.06em;
+  text-align: center;
+  opacity: 0.8;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STREAK WARNING (on fail screen)
+   ═══════════════════════════════════════════════════════════════ */
+.streak-warning {
+  width: 100%;
+  background: rgba(192, 57, 43, 0.1);
+  border: 1px solid rgba(192, 57, 43, 0.35);
+  color: #ff7675;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm, 4px);
+  font-family: var(--font-display);
+  font-size: var(--text-xs, 0.75rem);
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CHAPTER COMPLETE BANNER
+   ═══════════════════════════════════════════════════════════════ */
+.chapter-complete-banner {
+  width: 100%;
+  font-family: var(--font-display);
+  font-size: var(--text-base, 1rem);
+  text-align: center;
+  padding: var(--space-3, 12px) var(--space-4, 16px);
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm, 4px);
+  letter-spacing: 0.06em;
+  background: rgba(255,255,255,0.03);
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PROGRESS BAR PULSE (last question)
+   ═══════════════════════════════════════════════════════════════ */
+@keyframes pulsebar {
+  0%, 100% { box-shadow: 0 0 4px var(--color-primary, #c9962a); }
+  50%       { box-shadow: 0 0 14px var(--color-primary, #c9962a), 0 0 24px rgba(201,150,42,0.4); }
+}
+.progress-pulse {
+  animation: pulsebar 0.9s ease infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ARROW BUTTONS — larger tap targets (mobile)
+   ═══════════════════════════════════════════════════════════════ */
+.arrow-btn {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
