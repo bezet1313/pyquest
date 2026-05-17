@@ -39,9 +39,13 @@ export default function Leaderboard() {
           <div className="loading-screen">
             <div className="snake-loader">🔥</div>
           </div>
-        ) : sorted.length === 0 ? (
-          <div className="empty-state">
-            <p>Loch czeka na pierwszego bohatera...</p>
+        ) : sorted.length < 10 ? (
+          <div className="empty-state" data-testid="leaderboard-hidden">
+            <p style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>⚔️</p>
+            <p style={{ fontWeight: 600, marginBottom: "0.25rem" }}>Tablica czeka na bohaterów</p>
+            <p style={{ color: "var(--color-muted, #9c8a8a)", fontSize: "0.9rem" }}>
+              Tablica Chwały otwiera się gdy dotrze tu {10 - sorted.length} {10 - sorted.length === 1 ? "bohater" : "bohaterów"} więcej.
+            </p>
           </div>
         ) : (
           <div className="leaderboard-list">

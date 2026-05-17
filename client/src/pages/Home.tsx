@@ -7,14 +7,9 @@ import { getPlayerId, setPlayerId, clearPlayer, getLastLesson, clearLastLesson, 
 import type { Player } from "@shared/schema";
 
 const CLASSES = [
-  { emoji: "🧙", name: "Czarodziej" },
   { emoji: "⚔️", name: "Wojownik" },
-  { emoji: "🏹", name: "Łucznik" },
-  { emoji: "🛡️", name: "Paladyn" },
-  { emoji: "🐉", name: "Nekromanta" },
+  { emoji: "🧙", name: "Mag" },
   { emoji: "🗡️", name: "Łotrzyk" },
-  { emoji: "🔮", name: "Mistyk" },
-  { emoji: "🦅", name: "Ranger" },
 ];
 
 function DungeonLogo({ size = 40 }: { size?: number }) {

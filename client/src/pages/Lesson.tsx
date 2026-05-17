@@ -34,7 +34,7 @@ function QuizQuestion({
       setShake(true);
       setTimeout(() => setShake(false), 400);
     }
-    setTimeout(() => onAnswer(correct), 1400);
+    setTimeout(() => onAnswer(correct), correct ? 800 : 1600);
   };
 
   return (
@@ -109,7 +109,7 @@ function FillQuestion({
       setShake(true);
       setTimeout(() => setShake(false), 400);
     }
-    setTimeout(() => onAnswer(isCorrect), 1400);
+    setTimeout(() => onAnswer(isCorrect), isCorrect ? 800 : 1600);
   };
 
   return (
@@ -202,7 +202,7 @@ function OrderQuestion({
       setShake(true);
       setTimeout(() => setShake(false), 400);
     }
-    setTimeout(() => onAnswer(isCorrect), 1400);
+    setTimeout(() => onAnswer(isCorrect), isCorrect ? 800 : 1600);
   };
 
   return (
@@ -279,7 +279,7 @@ function CodeQuestion({
       .includes((q.expectedOutput || "print(").toLowerCase());
     setRevealed(true);
     if (hasExpected) setShowXpFloat(true);
-    setTimeout(() => onAnswer(hasExpected), 1400);
+    setTimeout(() => onAnswer(hasExpected), hasExpected ? 800 : 1600);
   };
 
   return (
