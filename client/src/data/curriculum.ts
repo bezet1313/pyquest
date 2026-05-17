@@ -793,6 +793,286 @@ print(w.atak())`,
       },
     ],
   },
+  // ═══════════════════════════════════════════════════════════
+  // CHAPTER: Pętle i iteracje (new lessons)
+  // ═══════════════════════════════════════════════════════════
+  {
+    id: "loops-advanced",
+    title: "Pętle i iteracje",
+    description: "For, while i sterowanie przepływem",
+    color: "#06b6d4",
+    accent: "#0891b2",
+    level: "beginner" as const,
+    icon: "🔄",
+    lessons: [
+      {
+        id: "for-loops",
+        title: "Pętla for",
+        description: "Iteruj po listach i zakresach",
+        icon: "🔁",
+        theory: `Pętla **for** pozwala wykonać kod wielokrotnie — dla każdego elementu listy lub zakresu.
+
+Funkcja **range(n)** tworzy zakres liczb od 0 do n-1.
+
+**for i in range(3):** wykona ciało pętli 3 razy (i = 0, 1, 2).`,
+        codeExample: `for i in range(3):
+    print(i)  # wypisze: 0, 1, 2
+
+owoce = ["jabłko", "banan", "wiśnia"]
+for owoc in owoce:
+    print(owoc)`,
+        questions: [
+          {
+            id: "for-q1",
+            type: "quiz" as const,
+            prompt: "Co wypisze ten kod?\n\nfor i in range(3):\n    print(i)",
+            explanation: "range(3) tworzy zakres 0, 1, 2. Pętla wypisuje każdą wartość.",
+            options: [
+              { id: "a", text: "1, 2, 3", correct: false },
+              { id: "b", text: "0, 1, 2", correct: true },
+              { id: "c", text: "0, 1, 2, 3", correct: false },
+              { id: "d", text: "1, 2", correct: false },
+            ],
+            xp: 10,
+          },
+          {
+            id: "for-q2",
+            type: "fill" as const,
+            prompt: "Uzupełnij pętlę, która iteruje po liście:",
+            fillTemplate: "_____ owoc in owoce:",
+            correctFill: ["for"],
+            explanation: "Słowo kluczowe 'for' rozpoczyna pętlę iterującą po elementach kolekcji.",
+            xp: 10,
+          },
+          {
+            id: "for-q3",
+            type: "quiz" as const,
+            prompt: "Ile razy wykona się pętla?\n\nfor i in range(5):\n    print('PyQuest')",
+            explanation: "range(5) tworzy 5 wartości: 0, 1, 2, 3, 4. Pętla wykona się 5 razy.",
+            options: [
+              { id: "a", text: "4 razy", correct: false },
+              { id: "b", text: "6 razy", correct: false },
+              { id: "c", text: "5 razy", correct: true },
+              { id: "d", text: "0 razy", correct: false },
+            ],
+            xp: 10,
+          },
+          {
+            id: "for-q4",
+            type: "order" as const,
+            prompt: "Ułóż kod, który wypisuje liczby 1, 2, 3:",
+            orderLines: [
+              "for i in range(1, 4):",
+              "    print(i)",
+            ],
+            correctOrder: [0, 1],
+            explanation: "range(1, 4) tworzy zakres od 1 do 3 (4 jest wykluczone). Wcięcie oznacza ciało pętli.",
+            xp: 15,
+          },
+        ],
+      },
+      {
+        id: "while-loops",
+        title: "Pętla while",
+        description: "Powtarzaj dopóki warunek jest spełniony",
+        icon: "⏳",
+        theory: `Pętla **while** wykonuje kod tak długo, jak warunek jest prawdziwy.
+
+Warunek jest sprawdzany **przed** każdym wykonaniem ciała pętli.
+
+UWAGA: Pętla while bez zmiany warunku wewnątrz tworzy **pętlę nieskończoną**!`,
+        codeExample: `licznik = 0
+while licznik < 3:
+    print(licznik)
+    licznik += 1
+# Wypisze: 0, 1, 2`,
+        questions: [
+          {
+            id: "wh-q1",
+            type: "quiz" as const,
+            prompt: "Co wypisze ten kod?\n\nx = 5\nwhile x > 3:\n    print(x)\n    x -= 1",
+            explanation: "x zaczyna od 5. Pętla działa dla x=5 (wypisuje 5), x=4 (wypisuje 4), x=3 jest fałszem — koniec.",
+            options: [
+              { id: "a", text: "5, 4, 3", correct: false },
+              { id: "b", text: "5, 4", correct: true },
+              { id: "c", text: "5", correct: false },
+              { id: "d", text: "4, 3", correct: false },
+            ],
+            xp: 10,
+          },
+          {
+            id: "wh-q2",
+            type: "fill" as const,
+            prompt: "Uzupełnij pętlę while:",
+            fillTemplate: "while x _____ 10:",
+            correctFill: ["<", "< "],
+            explanation: "Operator < (mniejszy niż) sprawdza warunek. Pętla działa dopóki x jest mniejsze od 10.",
+            xp: 10,
+          },
+          {
+            id: "wh-q3",
+            type: "quiz" as const,
+            prompt: "Co się stanie, jeśli warunek while nigdy nie stanie się fałszem?",
+            explanation: "Pętla nieskończona zawiesza program. Zawsze zadbaj o to, żeby warunek mógł zostać fałszem — np. przez inkrementację zmiennej.",
+            options: [
+              { id: "a", text: "Program się zatrzyma po 100 iteracjach", correct: false },
+              { id: "b", text: "Pętla nigdy się nie skończy (nieskończona pętla)", correct: true },
+              { id: "c", text: "Python automatycznie przerwie pętlę", correct: false },
+              { id: "d", text: "Wystąpi błąd składni", correct: false },
+            ],
+            xp: 10,
+          },
+          {
+            id: "wh-q4",
+            type: "order" as const,
+            prompt: "Ułóż poprawną pętlę while:",
+            orderLines: [
+              "n = 1",
+              "while n <= 3:",
+              "    print(n)",
+              "    n += 1",
+            ],
+            correctOrder: [0, 1, 2, 3],
+            explanation: "Najpierw inicjalizacja zmiennej, potem warunek while, ciało pętli, a na końcu inkrementacja — żeby pętla kiedyś się skończyła.",
+            xp: 15,
+          },
+        ],
+      },
+      {
+        id: "functions-basic",
+        title: "Funkcje — podstawy",
+        description: "Definiuj i wywołuj własne funkcje",
+        icon: "⚙️",
+        theory: `**Funkcja** to nazwany blok kodu, który możesz uruchamiać wielokrotnie.
+
+Definicja: **def nazwa_funkcji():** — po dwukropku wcięty blok kodu.
+
+Wywołanie: **nazwa_funkcji()** — nawiasy są obowiązkowe!`,
+        codeExample: `def przywitaj():
+    print("Witaj, Pythonisto!")
+
+def dodaj(a, b):
+    return a + b
+
+przywitaj()      # Wywołanie
+wynik = dodaj(3, 4)  # wynik = 7`,
+        questions: [
+          {
+            id: "fn-q1",
+            type: "quiz" as const,
+            prompt: "Jakim słowem kluczowym definiujemy funkcję w Pythonie?",
+            explanation: "'def' (od 'define') to słowo kluczowe do definicji funkcji. Zawsze poprzedza nazwę funkcji.",
+            options: [
+              { id: "a", text: "function", correct: false },
+              { id: "b", text: "func", correct: false },
+              { id: "c", text: "def", correct: true },
+              { id: "d", text: "define", correct: false },
+            ],
+            xp: 10,
+          },
+          {
+            id: "fn-q2",
+            type: "fill" as const,
+            prompt: "Uzupełnij definicję funkcji:",
+            fillTemplate: "_____ powitanie():",
+            correctFill: ["def"],
+            explanation: "'def' rozpoczyna definicję funkcji. Następuje po nim nazwa, nawiasy i dwukropek.",
+            xp: 10,
+          },
+          {
+            id: "fn-q3",
+            type: "quiz" as const,
+            prompt: "Co zwróci ta funkcja?\n\ndef podwoj(x):\n    return x * 2\n\nprint(podwoj(5))",
+            explanation: "Funkcja mnoży x przez 2. Dla x=5: 5*2=10. Instrukcja return zwraca wartość.",
+            options: [
+              { id: "a", text: "5", correct: false },
+              { id: "b", text: "25", correct: false },
+              { id: "c", text: "10", correct: true },
+              { id: "d", text: "Błąd", correct: false },
+            ],
+            xp: 10,
+          },
+          {
+            id: "fn-q4",
+            type: "order" as const,
+            prompt: "Ułóż poprawną definicję i wywołanie funkcji:",
+            orderLines: [
+              "def suma(a, b):",
+              "    return a + b",
+              "wynik = suma(3, 7)",
+              "print(wynik)",
+            ],
+            correctOrder: [0, 1, 2, 3],
+            explanation: "Kolejność: definicja funkcji (def + ciało), wywołanie z przypisaniem, wypisanie wyniku.",
+            xp: 15,
+          },
+        ],
+      },
+      {
+        id: "strings-methods",
+        title: "Metody łańcuchów",
+        description: "Manipuluj tekstem w Pythonie",
+        icon: "📝",
+        theory: `Łańcuchy tekstowe (strings) mają wbudowane **metody** — funkcje przypisane do obiektu.
+
+**upper()** — zamienia na wielkie litery
+**lower()** — zamienia na małe litery
+**len()** — zwraca długość łańcucha
+**strip()** — usuwa białe znaki z początku i końca`,
+        codeExample: `tekst = "  Python  "
+print(tekst.upper())   # "  PYTHON  "
+print(tekst.strip())   # "Python"
+print(len(tekst))      # 10
+print(tekst.lower())   # "  python  "`,
+        questions: [
+          {
+            id: "str-q1",
+            type: "quiz" as const,
+            prompt: "Co wypisze ten kod?\n\ntekst = \"python\"\nprint(tekst.upper())",
+            explanation: "Metoda upper() zamienia wszystkie litery na wielkie. 'python' staje się 'PYTHON'.",
+            options: [
+              { id: "a", text: "python", correct: false },
+              { id: "b", text: "Python", correct: false },
+              { id: "c", text: "PYTHON", correct: true },
+              { id: "d", text: "PYTHON()", correct: false },
+            ],
+            xp: 10,
+          },
+          {
+            id: "str-q2",
+            type: "fill" as const,
+            prompt: "Uzupełnij kod, który zwróci długość tekstu:",
+            fillTemplate: "wynik = _____(\"dungeon\")",
+            correctFill: ["len"],
+            explanation: "Funkcja len() zwraca długość łańcucha. len('dungeon') = 7.",
+            xp: 10,
+          },
+          {
+            id: "str-q3",
+            type: "quiz" as const,
+            prompt: "Jaka będzie wartość?\n\nnapis = \"  hero  \"\nprint(len(napis.strip()))",
+            explanation: "strip() usuwa białe znaki z brzegów: '  hero  ' staje się 'hero' (4 znaki). len('hero') = 4.",
+            options: [
+              { id: "a", text: "8", correct: false },
+              { id: "b", text: "6", correct: false },
+              { id: "c", text: "4", correct: true },
+              { id: "d", text: "7", correct: false },
+            ],
+            xp: 10,
+          },
+          {
+            id: "str-q4",
+            type: "fill" as const,
+            prompt: "Wywołaj metodę, która zamieni na małe litery:",
+            fillTemplate: "wynik = \"PYTHON\"._____()",
+            correctFill: ["lower"],
+            explanation: "Metoda lower() zamienia wszystkie litery na małe. 'PYTHON'.lower() = 'python'.",
+            xp: 15,
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export function getLessonById(lessonId: string): { lesson: Lesson; chapter: Chapter } | null {

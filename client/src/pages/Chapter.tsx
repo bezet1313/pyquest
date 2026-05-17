@@ -76,11 +76,13 @@ export default function Chapter() {
             const prevDone = idx === 0 || completedIds.includes(chapter.lessons[idx - 1].id);
             const locked = !prevDone && idx > 0;
             const lessonXp = lesson.questions.reduce((s, q) => s + q.xp, 0);
+            const estMin = Math.ceil(lesson.questions.length * 0.5);
+            const isFirstCta = done === 0 && idx === 0 && !isDone && !locked;
 
             return (
               <button
                 key={lesson.id}
-                className={`lesson-row ${isDone ? "done" : ""} ${locked ? "locked" : ""}`}
+                className={`lesson-row ${isDone ? "done" : ""} ${locked ? "locked" : ""} ${isFirstCta ? "lesson-row-cta" : ""}`}
                 onClick={() => !locked && navigate(`/lesson/${lesson.id}`)}
                 disabled={locked}
                 data-testid={`card-lesson-${lesson.id}`}
@@ -92,7 +94,11 @@ export default function Chapter() {
                 <div className="lesson-row-info">
                   <span className="lesson-row-title">{lesson.title}</span>
                   <span className="lesson-row-desc">
-                    {isDone ? "Sala ukończona" : locked ? "Odblokuj poprzednią salę" : lesson.description}
+                    {isDone
+                      ? "Sala ukończona"
+                      : locked
+                      ? "Odblokuj poprzednią salę"
+                      : `${lesson.description} · ~${estMin} min`}
                   </span>
                 </div>
                 <div className="lesson-row-meta">

@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { curriculum, getTotalLessons, getLessonById } from "@/data/curriculum";
-import { getPlayerId, setPlayerId, clearPlayer, getLastLesson, clearLastLesson } from "@/lib/player";
+import { getPlayerId, setPlayerId, clearPlayer, getLastLesson, clearLastLesson, getStreak, getDailyCount } from "@/lib/player";
 import type { Player } from "@shared/schema";
 
 const CLASSES = [
@@ -247,6 +247,8 @@ export default function Home() {
 
   // ── HOME ─────────────────────────────────────────────────────────
   const levelMap: Record<string, string> = { beginner: "Nowicjusz", intermediate: "Adept", advanced: "Mistrz" };
+  const localStreak = getStreak();
+  const dailyCount = getDailyCount();
 
   return (
     <div className="app-shell">
@@ -283,6 +285,16 @@ export default function Home() {
             <span className="hero-greeting">⚔ {player?.name} powraca</span>
             <h2 className="hero-title">Eksploruj Loch</h2>
             <p className="hero-sub">Poziom {player?.level} · {completedIds.length}/{totalLessons} skarbów zdobytych</p>
+          <div className="daily-goal-row">
+            <div className={`daily-goal-chip ${dailyCount >= 1 ? "daily-done" : ""}`}>
+              {dailyCount >= 1 ? `✓ Dziś: ${dailyCount} ${dailyCount === 1 ? "lekcja" : "lekcje"} ukończona` : "Cel dzienny: 1 lekcja"}
+            </div>
+            {localStreak > 0 && (
+              <div className="streak-chip-home">
+                🔥 Passa: {localStreak} {localStreak === 1 ? "dzień" : "dni"}
+              </div>
+            )}
+          </div>
           </div>
           <div className="hero-progress-ring">
             <svg viewBox="0 0 80 80" width="80" height="80">

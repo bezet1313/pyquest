@@ -3,7 +3,7 @@ import { useLocation, useParams } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { getLessonById } from "@/data/curriculum";
-import { getPlayerId, setLastLesson, clearLastLesson } from "@/lib/player";
+import { getPlayerId, setLastLesson, clearLastLesson, recordLessonCompleted, incrementDailyCount, getStreak, isStreakAtRisk } from "@/lib/player";
 import type { Question } from "@/data/curriculum";
 
 const MAX_HP = 3;
@@ -369,6 +369,8 @@ export default function Lesson() {
   const [resultMsg, setResultMsg] = useState("");
   const [hp, setHp] = useState(MAX_HP);
   const [fromRetry, setFromRetry] = useState(false);
+  const [localStreak, setLocalStreak] = useState(getStreak);
+  const [streakAtRisk] = useState(isStreakAtRisk);
 
   // animated XP counter on complete screen
   const [displayXp, setDisplayXp] = useState(0);
@@ -446,6 +448,10 @@ export default function Lesson() {
         setResultMsg(msg);
         setPhase("complete");
         clearLastLesson();
+        // Record streak + daily goal
+        const newStreak = recordLessonCompleted();
+        setLocalStreak(newStreak);
+        incrementDailyCount();
         if (playerId) {
           saveProgress.mutate({
             playerId,
@@ -652,9 +658,15 @@ export default function Lesson() {
             </p>
 
             {/* Streak warning */}
-            <div className="streak-warning" data-testid="streak-warning">
-              Sprawdź swój wynik i spróbuj ponownie
-            </div>
+            {streakAtRisk && localStreak > 0 ? (
+              <div className="streak-warning" data-testid="streak-warning">
+                🔥 Twoja passa {localStreak} {localStreak === 1 ? "dnia" : "dni"} jest zagrożona!
+              </div>
+            ) : (
+              <div className="streak-warning" data-testid="streak-warning">
+                Sprawdź błędy i spróbuj ponownie
+              </div>
+            )}
 
             {/* Wrong questions list */}
             {answers.some((a) => !a) && (
@@ -758,6 +770,12 @@ export default function Lesson() {
                   }}
                 >
                   {chapter.title}
+                </strong>
+              </div>
+              <div className="stat-row">
+                <span>Passa</span>
+                <strong style={{ color: "#fb923c", fontFamily: "var(--font-display)" }}>
+                  🔥 {localStreak} {localStreak === 1 ? "dzień" : localStreak < 5 ? "dni" : "dni"}
                 </strong>
               </div>
             </div>

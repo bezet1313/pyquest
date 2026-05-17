@@ -1546,3 +1546,47 @@ body::before {
   align-items: center;
   justify-content: center;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   DAILY GOAL + STREAK (Home screen)
+   ═══════════════════════════════════════════════════════════════ */
+.daily-goal-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.daily-goal-chip {
+  font-family: var(--font-display);
+  font-size: var(--text-xs, 0.72rem);
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid rgba(201, 150, 42, 0.3);
+  color: var(--color-text-muted);
+  background: rgba(201, 150, 42, 0.06);
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
+}
+.daily-goal-chip.daily-done {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #4ade80;
+}
+.streak-chip-home {
+  font-family: var(--font-display);
+  font-size: var(--text-xs, 0.72rem);
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 99px;
+  border: 1px solid rgba(251, 146, 60, 0.4);
+  color: #fb923c;
+  background: rgba(251, 146, 60, 0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LESSON ROW CTA (first available lesson highlight)
+   ═══════════════════════════════════════════════════════════════ */
+.lesson-row-cta {
+  border-color: var(--color-primary, #c9962a) !important;
+  box-shadow: 0 0 10px rgba(201, 150, 42, 0.2), inset 0 0 0 1px rgba(201, 150, 42, 0.15) !important;
+}
