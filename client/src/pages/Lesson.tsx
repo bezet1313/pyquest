@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useParams } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { getLessonById } from "@/data/curriculum";
-import { getPlayerId } from "@/lib/player";
+import { getPlayerId, setLastLesson, clearLastLesson } from "@/lib/player";
 import type { Question } from "@/data/curriculum";
 
 // ── Question components ──────────────────────────────────────────────
@@ -212,6 +212,14 @@ export default function Lesson() {
   const playerId = getPlayerId();
 
   const found = getLessonById(lessonId ?? "");
+
+  // Save last lesson on enter, clear on complete
+  useEffect(() => {
+    if (found) {
+      setLastLesson(found.lesson.id, found.chapter.id);
+    }
+  }, [lessonId]);
+
   const [phase, setPhase] = useState<"theory" | "questions" | "complete">("theory");
   const [questionIdx, setQuestionIdx] = useState(0);
   const [score, setScore] = useState(0);
@@ -259,6 +267,7 @@ export default function Lesson() {
         setScore(finalScore);
         setResultMsg(msg);
         setPhase("complete");
+        clearLastLesson(); // lesson done — clear resume pointer
         if (playerId) {
           saveProgress.mutate({
             playerId,

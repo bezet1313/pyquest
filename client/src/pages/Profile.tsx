@@ -1,28 +1,59 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/lib/api";
 import { curriculum, getTotalLessons } from "@/data/curriculum";
-import { getPlayerId } from "@/lib/player";
+import { getPlayerId, clearPlayer } from "@/lib/player";
 import type { Player } from "@shared/schema";
 
 function getLevelTitle(level: number) {
   if (level >= 10) return "Legendarny Arcymag";
-  if (level >= 7) return "Mistrz Zaklęć";
-  if (level >= 5) return "Starszy Adept";
-  if (level >= 3) return "Adept Pythona";
-  if (level >= 2) return "Nowicjusz";
+  if (level >= 7)  return "Mistrz Zaklęć";
+  if (level >= 5)  return "Starszy Adept";
+  if (level >= 3)  return "Adept Pythona";
+  if (level >= 2)  return "Nowicjusz";
   return "Uczony Czeladnik";
 }
 
 export default function Profile() {
   const [, navigate] = useLocation();
   const playerId = getPlayerId();
+  const qc = useQueryClient();
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [resetDone, setResetDone] = useState(false);
 
   const { data: player } = useQuery<Player>({
     queryKey: ["/api/players", playerId],
-    queryFn: () => apiRequest("GET", `/api/players/${playerId}`),
+    queryFn: () => api.getPlayer(playerId!),
     enabled: !!playerId,
   });
+
+  // Reset progress — clears server-side completed lessons and XP
+  const resetProgress = useMutation({
+    mutationFn: () =>
+      api.updatePlayer(playerId!, {
+        totalXp: 0,
+        level: 1,
+        streak: 0,
+        completedLessons: "[]",
+        lastActiveDate: null,
+      }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["/api/players"] });
+      qc.invalidateQueries({ queryKey: ["/api/progress"] });
+      setShowResetConfirm(false);
+      setResetDone(true);
+    },
+  });
+
+  // Full new game — wipes player identity too
+  const handleNewGame = () => {
+    clearPlayer();
+    navigate("/");
+    // Force a full reload so Home shows onboarding
+    window.location.hash = "/";
+    window.location.reload();
+  };
 
   const completedIds: string[] = player ? JSON.parse(player.completedLessons || "[]") : [];
   const totalLessons = getTotalLessons();
@@ -40,6 +71,42 @@ export default function Profile() {
       </header>
 
       <main className="main-content">
+        {/* Reset confirm dialog */}
+        {showResetConfirm && (
+          <div className="confirm-overlay">
+            <div className="confirm-dialog">
+              <div className="confirm-icon">⚠️</div>
+              <h3 className="confirm-title">Zresetować postęp?</h3>
+              <p className="confirm-body">
+                Twoje XP, poziom i ukończone sale zostaną wyzerowane. Postać pozostaje — tylko postęp nauki zniknie.
+              </p>
+              <div className="confirm-actions">
+                <button
+                  className="btn-danger"
+                  onClick={() => resetProgress.mutate()}
+                  disabled={resetProgress.isPending}
+                  data-testid="button-confirm-reset"
+                >
+                  {resetProgress.isPending ? "Resetuję..." : "✗ Tak, zresetuj postęp"}
+                </button>
+                <button
+                  className="btn-secondary"
+                  onClick={() => setShowResetConfirm(false)}
+                  data-testid="button-cancel-reset"
+                >
+                  Anuluj
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {resetDone && (
+          <div className="reset-banner">
+            ✓ Postęp zresetowany — zacznij od nowa, bohaterze!
+          </div>
+        )}
+
         <div className="profile-hero">
           <div className="profile-avatar-big">{player?.avatar}</div>
           <h2 className="profile-name" data-testid="text-username">{player?.name}</h2>
@@ -100,6 +167,38 @@ export default function Profile() {
               </div>
             );
           })}
+        </div>
+
+        {/* Danger zone */}
+        <div className="section-title" style={{ marginTop: "var(--space-4)" }}>Zarządzanie postępem</div>
+        <div className="danger-zone">
+          <div className="danger-row">
+            <div className="danger-info">
+              <span className="danger-title">Resetuj postęp nauki</span>
+              <span className="danger-desc">Wyzeruj XP i ukończone lekcje. Postać pozostaje.</span>
+            </div>
+            <button
+              className="btn-danger-outline"
+              onClick={() => { setResetDone(false); setShowResetConfirm(true); }}
+              data-testid="button-reset-progress"
+            >
+              Resetuj
+            </button>
+          </div>
+          <div className="danger-divider" />
+          <div className="danger-row">
+            <div className="danger-info">
+              <span className="danger-title">Zacznij zupełnie od nowa</span>
+              <span className="danger-desc">Usuwa postać i cały postęp. Wrócisz do ekranu tworzenia bohatera.</span>
+            </div>
+            <button
+              className="btn-danger-outline"
+              onClick={handleNewGame}
+              data-testid="button-new-game"
+            >
+              Nowa gra
+            </button>
+          </div>
         </div>
       </main>
     </div>
